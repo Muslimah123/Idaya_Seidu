@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idaya Seidu - CV</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.7.570/pdf.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="profile-info">
+                <img src="idyy.jpg" alt="Idaya Seidu">
+                <div>
+                    <h1>Idaya Seidu</h1>
+                    <p>Aspiring Data Scientist and Product Manager</p>
+                </div>
+            </div>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="projects.html">Projects</a>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+                <a href="certifications.html">Certifications</a>
+                <a href="cv.html">CV</a>
+                <a href="blog.html">Blog</a>
+            </nav>
+        </div>
+    </header>
+    <section class="container">
+        <h2>Curriculum Vitae</h2>
+        <div id="cv-viewer" class="cv-viewer"></div>
+        <div class="download-cv">
+            <a href="Idaya_Seidu_ResCV.pdf" download>Download CV PDF</a>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2024 Idaya Seidu. All rights reserved.</p>
+    </footer>
+    <script>
+        var url = 'Idaya_Seidu_ResCV.pdf';
+
+        var pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.7.570/pdf.worker.min.js';
+
+        var loadingTask = pdfjsLib.getDocument(url);
+        loadingTask.promise.then(function(pdf) {
+            console.log('PDF loaded');
+            var viewer = document.getElementById('cv-viewer');
+
+            for (var pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                pdf.getPage(pageNum).then(function(page) {
+                    console.log('Page loaded');
+
+                    var scale = 1.5;
+                    var viewport = page.getViewport({ scale: scale });
+
+                    var canvas = document.createElement('canvas');
+                    canvas.className = 'pdf-canvas';
+                    viewer.appendChild(canvas);
+
+                    var context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    var renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
+            }
+        }, function(reason) {
+            console.error(reason);
+        });
+    </script>
+</body>
+</html>
